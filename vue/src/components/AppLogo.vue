@@ -3,6 +3,7 @@ import type { RouteLocationRaw } from 'vue-router'
 
 withDefaults(
   defineProps<{
+    text?: string
     to?: RouteLocationRaw
     sizeClass?: string
   }>(), {
@@ -13,7 +14,7 @@ withDefaults(
 </script>
 
 <template>
-  <RouterLink :to="to">
+  <RouterLink :to="to" class="flex items-center gap-2">
     <img
       alt="App logo"
       src="@/assets/logo.svg"
@@ -21,5 +22,8 @@ withDefaults(
       height="125"
       :class="sizeClass"
     />
+    <strong v-if="text" class="hidden md:block text-xl">
+      {{ text }}
+    </strong>
   </RouterLink>
 </template>
