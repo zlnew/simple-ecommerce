@@ -22,7 +22,7 @@ const submitHandler = async () => {
 </script>
 
 <template>
-  <fwb-card variant="image" class="w-80 md:w-96">
+  <FwbCard variant="image" class="w-80 md:w-96">
     <div class="p-5">
       <h5 class="text-xl font-bold tracking-tight">
         Forgot your password?
@@ -40,15 +40,15 @@ const submitHandler = async () => {
             that will allow you to choose a new one.
           </p>
 
-          <fwb-alert v-if="validationMessage" type="danger">
+          <FwbAlert v-if="validationMessage" type="danger" closable>
             {{ validationMessage }}
-          </fwb-alert>
+          </FwbAlert>
 
-          <fwb-alert v-if="status" type="success">
+          <FwbAlert v-if="status" type="success" closable>
             {{ status }}
-          </fwb-alert>
+          </FwbAlert>
 
-          <fwb-input
+          <FwbInput
             v-model="email"
             placeholder="Enter your email address"
             :validation-status="validationErrors?.email && 'error'"
@@ -62,9 +62,9 @@ const submitHandler = async () => {
       <div class="p-5">
         <div class="flex items-center justify-between gap-4">
           <RouterLink to="/auth/login" class="text-sm">Back to login</RouterLink>
-          <fwb-button type="submit" color="green" :disabled="processing">Request</fwb-button>
+          <FwbButton type="submit" color="green" :disabled="processing">Request</FwbButton>
         </div>
       </div>
     </form>
-  </fwb-card>
+  </FwbCard>
 </template>

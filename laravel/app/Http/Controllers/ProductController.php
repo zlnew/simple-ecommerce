@@ -30,6 +30,10 @@ class ProductController extends Controller
             $productQuery->where('category', $request->category);
         }
 
+        if ($request->price_min && $request->price_max) {
+            $productQuery->whereBetween('price', [$request->price_min, $request->price_max]);
+        }
+
         $product = $productQuery->get();
 
         return new ProductResource($product);
@@ -50,7 +54,10 @@ class ProductController extends Controller
 
         $product->save();
 
-        return new ProductResource($product);
+        return response([
+            'status' => 'Product created successfully',
+            'data' => new ProductResource($product)
+        ]);
     }
 
     public function show(Product $product)
@@ -73,7 +80,10 @@ class ProductController extends Controller
 
         $product->save();
 
-        return new ProductResource($product);
+        return response([
+            'status' => 'Product updated successfully',
+            'data' => new ProductResource($product)
+        ]);
     }
 
     public function destroy(Product $product)
@@ -84,6 +94,8 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return response()->noContent();
+        return response([
+            'status' => 'Product deleted successfully'
+        ]);
     }
 }

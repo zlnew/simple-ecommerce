@@ -9,7 +9,11 @@ const { user } = useAuthStore()
 
 onBeforeMount(() => {
   if (user) {
-    router.push('/')
+    if (user.is_admin) {
+      router.push('/admin/dashboard')
+    } else {
+      router.push('/')
+    }
   }
 })
 </script>

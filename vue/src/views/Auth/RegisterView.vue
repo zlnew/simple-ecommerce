@@ -16,11 +16,17 @@ const form = reactive({
   password_confirmation: ''
 })
 
-const submitHandler = () => submit.execute(() => register(form))
+const submitHandler = async () => {
+  await submit.execute(() => register(form), {
+    onSuccess: () => {
+      window.location.reload()
+    }
+  })
+}
 </script>
 
 <template>
-  <fwb-card variant="image" class="w-80 md:w-96">
+  <FwbCard variant="image" class="w-80 md:w-96">
     <div class="p-5">
       <h5 class="text-xl font-bold tracking-tight">
         Register an account
@@ -32,11 +38,11 @@ const submitHandler = () => submit.execute(() => register(form))
     <form @submit.prevent="submitHandler">
       <div class="p-5">
         <div class="space-y-4">
-          <fwb-alert v-if="validationMessage" type="danger">
+          <FwbAlert v-if="validationMessage" type="danger" closable>
             {{ validationMessage }}
-          </fwb-alert>
+          </FwbAlert>
           
-          <fwb-input
+          <FwbInput
             v-model="form.name"
             placeholder="Full Name"
             :validation-status="validationErrors?.name && 'error'"
@@ -45,9 +51,9 @@ const submitHandler = () => submit.execute(() => register(form))
             <template #validationMessage>
               {{ validationErrors?.name?.[0] }}
             </template>
-          </fwb-input>
+          </FwbInput>
 
-          <fwb-input
+          <FwbInput
             v-model="form.email"
             type="email"
             placeholder="Email address"
@@ -57,9 +63,9 @@ const submitHandler = () => submit.execute(() => register(form))
             <template #validationMessage>
               {{ validationErrors?.email?.[0] }}
             </template>
-          </fwb-input>
+          </FwbInput>
     
-          <fwb-input
+          <FwbInput
             v-model="form.password"
             type="password"
             placeholder="Password"
@@ -69,9 +75,9 @@ const submitHandler = () => submit.execute(() => register(form))
             <template #validationMessage>
               {{ validationErrors?.password?.[0] }}
             </template>
-          </fwb-input>
+          </FwbInput>
 
-          <fwb-input
+          <FwbInput
             v-model="form.password_confirmation"
             type="password"
             placeholder="Confirm Password"
@@ -81,7 +87,7 @@ const submitHandler = () => submit.execute(() => register(form))
             <template #validationMessage>
               {{ validationErrors?.password_confirmation?.[0] }}
             </template>
-          </fwb-input>
+          </FwbInput>
         </div>
       </div>
       
@@ -90,9 +96,9 @@ const submitHandler = () => submit.execute(() => register(form))
       <div class="p-5">
         <div class="flex items-center justify-between gap-4">
           <RouterLink to="/auth/login" class="text-sm">Already have an account?</RouterLink>
-          <fwb-button type="submit" color="green" :disabled="processing">Register</fwb-button>
+          <FwbButton type="submit" color="green" :disabled="processing">Register</FwbButton>
         </div>
       </div>
     </form>
-  </fwb-card>
+  </FwbCard>
 </template>

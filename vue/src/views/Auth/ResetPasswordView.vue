@@ -4,8 +4,10 @@ import { useSubmitStore } from '@/stores/submit'
 import { FwbCard, FwbInput, FwbButton, FwbAlert } from 'flowbite-vue'
 import { storeToRefs } from 'pinia'
 import { onMounted, reactive } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
+const route = useRoute()
+const router = useRouter()
 const submit = useSubmitStore()
 const { resetPassword } = useAuthStore()
 const { processing, validationMessage, validationErrors } = storeToRefs(submit)
@@ -20,14 +22,12 @@ const form = reactive({
 const submitHandler = async () => {
   await submit.execute(() => resetPassword(form), {
     onSuccess: (statusMessage) => {
-      window.location.href = `/auth/login?status=${statusMessage}`
+      router.push(`/auth/login?success=${statusMessage}`)
     }
   })
 }
 
 onMounted(() => {
-  const route = useRoute()
-
   if (typeof route.params.token === 'string') {
     form.token = route.params.token
   }
@@ -39,7 +39,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <fwb-card variant="image" class="w-80 md:w-96">
+  <FwbCard variant="image" class="w-80 md:w-96">
     <div class="p-5">
       <h5 class="text-xl font-bold tracking-tight">
         Reset Password
@@ -51,11 +51,11 @@ onMounted(() => {
     <form @submit.prevent="submitHandler">
       <div class="p-5">
         <div class="space-y-4">
-          <fwb-alert v-if="validationMessage" type="danger">
+          <FwbAlert v-if="validationMessage" type="danger" closable>
             {{ validationMessage }}
-          </fwb-alert>
+          </FwbAlert>
           
-          <fwb-input
+          <FwbInput
             v-model="form.password"
             type="password"
             placeholder="Password"
@@ -65,9 +65,9 @@ onMounted(() => {
             <template #validationMessage>
               {{ validationErrors?.password?.[0] }}
             </template>
-          </fwb-input>
+          </FwbInput>
 
-          <fwb-input
+          <FwbInput
             v-model="form.password_confirmation"
             type="password"
             placeholder="Confirm Password"
@@ -77,7 +77,7 @@ onMounted(() => {
             <template #validationMessage>
               {{ validationErrors?.password_confirmation?.[0] }}
             </template>
-          </fwb-input>
+          </FwbInput>
         </div>
       </div>
       
@@ -85,9 +85,9 @@ onMounted(() => {
       
       <div class="p-5">
         <div class="flex items-center justify-end">
-          <fwb-button type="submit" color="green" :disabled="processing">Reset Password</fwb-button>
+          <FwbButton type="submit" color="green" :disabled="processing">Reset Password</FwbButton>
         </div>
       </div>
     </form>
-  </fwb-card>
+  </FwbCard>
 </template>

@@ -1,10 +1,10 @@
 import { initCsrf } from '@/stores/auth'
 import Axios from 'axios'
 
-const baseURL = import.meta.env.VITE_API_URL
+const apiBaseURL = import.meta.env.VITE_API_URL
 
 const api = Axios.create({
-  baseURL,
+  baseURL: apiBaseURL,
   headers: {
     'X-Requested-With': 'XMLHttpRequest'
   },
@@ -27,7 +27,7 @@ api.interceptors.request.use(
 
 export {
   Axios,
-  baseURL
+  apiBaseURL
 }
 
 export default api

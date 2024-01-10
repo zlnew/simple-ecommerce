@@ -22,6 +22,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
 
-    Route::apiResource('products', ProductController::class)->except('index', 'show', 'update');
-    Route::post('/products/{product}', [ProductController::class, 'update']);
+    Route::middleware(['admin'])->group(function () {
+        Route::apiResource('products', ProductController::class)->except('index', 'show', 'update');
+        Route::post('/products/{product}', [ProductController::class, 'update']);
+    });
 });

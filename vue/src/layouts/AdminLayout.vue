@@ -1,26 +1,22 @@
 <script setup lang="ts">
 import AppLogo from '@/components/AppLogo.vue'
+import ProfileDropdown from '@/components/ProfileDropdown.vue'
 import { useAuthStore } from '@/stores/auth'
-import { useSubmitStore } from '@/stores/submit'
-import { FwbButton, FwbDropdown, FwbListGroup, FwbListGroupItem } from 'flowbite-vue'
+import { FwbButton } from 'flowbite-vue'
 import { onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const submit = useSubmitStore()
-const { user, logout } = useAuthStore()
+const { user } = useAuthStore()
 
-const logoutHandler = async () => {
-  await submit.execute(() => logout(), {
-    onSuccess: () => {
-      window.location.reload()
-    }
-  })
-}
 
 onBeforeMount(() => {
   if (!user) {
     router.push('/auth/login')
+  }
+
+  if (user && !user.is_admin) {
+    router.push('/')
   }
 })
 </script>
@@ -32,20 +28,7 @@ onBeforeMount(() => {
         <div class="flex items-center justify-between gap-4">
           <AppLogo to="/admin/dashboard" text="Vue Commerce Admin" />
 
-          <fwb-dropdown v-if="user">
-            <template #trigger>
-              <FwbButton color="light">{{ user.name }}</FwbButton>
-            </template>
-            
-            <fwb-list-group>
-              <fwb-list-group-item>
-                Profile
-              </fwb-list-group-item>
-              <fwb-list-group-item class="cursor-pointer" @click="logoutHandler">
-                Logout
-              </fwb-list-group-item>
-            </fwb-list-group>
-          </fwb-dropdown>
+          <ProfileDropdown v-if="user" />
 
           <RouterLink v-else to="/auth/login">
             <FwbButton color="green">Log In</FwbButton>

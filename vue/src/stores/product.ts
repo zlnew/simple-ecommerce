@@ -14,7 +14,11 @@ export type Product = {
 
 export type ProductParams = {
   search?: string
-  category?: string
+  filters?: {
+    category?: string
+    price_min?: number
+    price_max?: number
+  }
 }
 
 export type ProductStoreForm = {
@@ -22,7 +26,7 @@ export type ProductStoreForm = {
   description: string
   price: number
   category: string
-  image: File
+  image: File | null
 }
 
 export type ProductUpdateForm = {
@@ -34,9 +38,10 @@ export type ProductUpdateForm = {
 }
 
 export const useProductStore = defineStore('product', () => {
-  async function get (params?: ProductParams) {
+  async function get ({ search, filters }: ProductParams) {
+
     const { data: res } = await api.get<{ data: Product[] }>('/api/products', {
-      params
+      params: { search, ...filters }
     })
 
     return res.data
@@ -49,9 +54,9 @@ export const useProductStore = defineStore('product', () => {
   }
 
   async function store (data: ProductStoreForm) {
-    const { data: res } = await api.post<{ data: Product }>('/api/products', data, {
+    const res = await api.post<{ status: string, data: Product }>('/api/products', data, {
       headers: {
-        "content-type": "multipart/form-data"
+        'content-type': 'multipart/form-data'
       }
     })
 
@@ -59,9 +64,9 @@ export const useProductStore = defineStore('product', () => {
   }
 
   async function update (id: number, data: ProductUpdateForm) {
-    const { data: res } = await api.post<{ data: Product }>(`/api/products/${id}`, data, {
+    const res = await api.post<{ status: string, data: Product }>(`/api/products/${id}`, data, {
       headers: {
-        "content-type": "multipart/form-data"
+        'content-type': 'multipart/form-data'
       }
     })
 
@@ -69,7 +74,9 @@ export const useProductStore = defineStore('product', () => {
   }
 
   async function destroy (id: number) {
-    return await api.delete(`/api/products/${id}`)
+    const res = await api.delete<{ status: string }>(`/api/products/${id}`)
+
+    return res.data.status
   }
 
   return {

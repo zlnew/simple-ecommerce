@@ -16,7 +16,32 @@ function getProductCategories (products: Product[]) {
   return [...new Set(categories)]
 }
 
+function getImagePreview (file?: File | null): Promise<string> {
+  if (file) {
+    const reader = new FileReader()
+
+    return new Promise(function (resolve, reject) {
+      reader.onload = function (e: ProgressEvent<FileReader>) {
+        if (e.target && e.target.result) {
+          resolve(e.target.result.toString())
+        } else {
+          reject(new Error("Failed to read the file"))
+        }
+      }
+
+      reader.onerror = function (e) {
+        reject(e)
+      }
+
+      reader.readAsDataURL(file)
+    })
+  } else {
+    return Promise.reject(new Error("No file selected"))
+  }
+}
+
 export {
   Rp,
-  getProductCategories
+  getProductCategories,
+  getImagePreview
 }

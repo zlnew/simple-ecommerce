@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import VueCard from '@/components/VueCard.vue'
+import { apiBaseURL } from '@/lib/api'
 import { useProductStore, type Product } from '@/stores/product'
 import { Rp } from '@/utils'
 import {
@@ -15,7 +17,6 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const appName = import.meta.env.VITE_APP_NAME
-const apiBaseURL = import.meta.env.VITE_API_URL
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -69,7 +70,7 @@ onMounted(async () => {
       Product not found
     </div>
 
-    <div v-else class="rounded-lg shadow-sm border bg-white">
+    <VueCard v-else>
       <div class="p-5">
         <div class="grid md:grid-cols-2 gap-4 md:gap-8">
           <div>
@@ -86,9 +87,9 @@ onMounted(async () => {
             
             <p class="text-2xl">{{ Rp(product.price) }}</p>
     
-            <div class="grid grid-cols-3 items-center gap-2">
+            <div class="grid grid-cols-3 items-end gap-2">
               <div>
-                <FwbInput model-value="1" type="number" placeholder="Qty" />
+                <FwbInput model-value="1" type="number" placeholder="Qty" label="Qty" />
               </div>
               <div class="col-span-2">
                 <FwbButton size="lg" color="green" class="w-full">Add to cart</FwbButton>
@@ -97,37 +98,37 @@ onMounted(async () => {
     
             <hr>
             
-            <fwb-accordion always-open>
-              <fwb-accordion-panel>
-                <fwb-accordion-header>Description</fwb-accordion-header>
-                <fwb-accordion-content>
+            <FwbAccordion always-open>
+              <FwbAccordionPanel>
+                <FwbAccordionHeader>Description</FwbAccordionHeader>
+                <FwbAccordionContent>
                   <div class="space-y-4">
                     <p>{{ product.description }}</p>
                   </div>
-                </fwb-accordion-content>
-              </fwb-accordion-panel>
+                </FwbAccordionContent>
+              </FwbAccordionPanel>
     
-              <fwb-accordion-panel>
-                <fwb-accordion-header>Return & Refund Policy</fwb-accordion-header>
-                <fwb-accordion-content>
+              <FwbAccordionPanel>
+                <FwbAccordionHeader>Return & Refund Policy</FwbAccordionHeader>
+                <FwbAccordionContent>
                   <div>
                     <p>I'm a Return and Refund policy. I'm a great place to let your customers know what to do in case they are dissatisfied with their purchase. Having a straightforward refund or exchange policy is a great way to build trust and reassure your customers that they can buy with confidence.</p>
                   </div>
-                </fwb-accordion-content>
-              </fwb-accordion-panel>
+                </FwbAccordionContent>
+              </FwbAccordionPanel>
               
-              <fwb-accordion-panel>
-                <fwb-accordion-header>Shipping Info</fwb-accordion-header>
-                <fwb-accordion-content>
+              <FwbAccordionPanel>
+                <FwbAccordionHeader>Shipping Info</FwbAccordionHeader>
+                <FwbAccordionContent>
                   <div>
                     <p>I'm a shipping policy. I'm a great place to add more information about your shipping methods, packaging and cost. Providing straightforward information about your shipping policy is a great way to build trust and reassure your customers that they can buy from you with confidence.</p>
                   </div>
-                </fwb-accordion-content>
-              </fwb-accordion-panel>
-            </fwb-accordion>
+                </FwbAccordionContent>
+              </FwbAccordionPanel>
+            </FwbAccordion>
           </div>
         </div>
       </div>
-    </div>
+    </VueCard>
   </div>
 </template>

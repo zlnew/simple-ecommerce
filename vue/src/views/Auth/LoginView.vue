@@ -25,7 +25,7 @@ const submitHandler = async () => {
 </script>
 
 <template>
-  <fwb-card variant="image" class="w-80 md:w-96">
+  <FwbCard variant="image" class="w-80 md:w-96">
     <div class="p-5">
       <h5 class="text-xl font-bold tracking-tight">
         Log In to your account
@@ -37,15 +37,20 @@ const submitHandler = async () => {
     <form @submit.prevent="submitHandler">
       <div class="p-5">
         <div class="space-y-4">
-          <fwb-alert v-if="validationMessage" type="danger">
+          <FwbAlert v-if="validationMessage" type="danger" closable>
             {{ validationMessage }}
-          </fwb-alert>
+          </FwbAlert>
 
-          <fwb-alert v-if="$route.query.status" type="info">
-            {{ $route.query.status }}
-          </fwb-alert>
+          <FwbAlert
+            v-if="$route.query.success"
+            type="success"
+            closable
+            @close="$router.replace({ query: { success: undefined } })"
+          >
+            {{ $route.query.success }}
+          </FwbAlert>
 
-          <fwb-input
+          <FwbInput
             v-model="form.email"
             type="email"
             placeholder="Email address"
@@ -55,9 +60,9 @@ const submitHandler = async () => {
             <template #validationMessage>
               {{ validationErrors?.email?.[0] }}
             </template>
-          </fwb-input>
+          </FwbInput>
     
-          <fwb-input
+          <FwbInput
             v-model="form.password"
             type="password"
             placeholder="Password"
@@ -67,9 +72,9 @@ const submitHandler = async () => {
             <template #validationMessage>
               {{ validationErrors?.password?.[0] }}
             </template>
-          </fwb-input>
+          </FwbInput>
 
-          <fwb-checkbox
+          <FwbCheckbox
             v-model="form.remember"
             label="Remember Me"
           />
@@ -87,9 +92,9 @@ const submitHandler = async () => {
       <div class="p-5">
         <div class="flex items-center justify-between gap-4">
           <RouterLink to="/auth/register" class="text-sm">Don't have an account?</RouterLink>
-          <fwb-button type="submit" color="green" :disabled="processing">Log In</fwb-button>
+          <FwbButton type="submit" color="green" :disabled="processing">Log In</FwbButton>
         </div>
       </div>
     </form>
-  </fwb-card>
+  </FwbCard>
 </template>
